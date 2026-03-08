@@ -19,6 +19,8 @@ export function FloppyBall() {
   const [gameState, setGameState] = useState<GameState>("start");
   const [finalScore, setFinalScore] = useState(0);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [username, setUsername] = useState("");
+  const [personalBest, setPersonalBest] = useState(0);
   const { submitScore } = useSupabase();
   const [game] = useState(
     () =>
@@ -32,7 +34,10 @@ export function FloppyBall() {
         onGameStateChange: (nextGameState, score) => {
           setGameState(nextGameState);
           if (nextGameState === "playing") setShowLeaderboard(false);
-          if (typeof score === "number") setFinalScore(score);
+          if (typeof score === "number") {
+            setFinalScore(score);
+            if (score > 0) setPersonalBest((prev) => Math.max(prev, score));
+          }
         },
       }),
   );
@@ -42,8 +47,9 @@ export function FloppyBall() {
   }, [game]);
 
   const handleStart = useCallback(
-    (username: string) => {
-      game.setUsername(username);
+    (name: string) => {
+      game.setUsername(name);
+      setUsername(name);
       game.jump();
     },
     [game],
@@ -97,7 +103,7 @@ export function FloppyBall() {
               showLeaderboard ? "opacity-100" : "opacity-0 pointer-events-none",
             )}
           >
-            <LeaderboardTable />
+            <LeaderboardTable username={username} personalBest={personalBest} />
           </div>
         </div>
 

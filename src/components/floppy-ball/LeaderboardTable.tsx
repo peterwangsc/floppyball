@@ -4,12 +4,7 @@ import { formatDate, cn } from "@/utils";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
-type LeaderboardTableProps = {
-  username: string;
-  personalBest: number;
-};
-
-function LeaderboardTableComponent({ username, personalBest }: LeaderboardTableProps) {
+function LeaderboardTableComponent() {
   const { leaderboards } = useSupabase();
 
   return (
@@ -91,22 +86,6 @@ function LeaderboardTableComponent({ username, personalBest }: LeaderboardTableP
           </tbody>
         </table>
       </div>
-
-      {username && personalBest > 0 && (
-        <div className="shrink-0 border-t border-flag/25 bg-pine-dark px-4 py-2.5 flex items-center justify-between gap-3 select-none">
-          <div className="min-w-0">
-            <div className="font-display text-2xs text-flag/60 tracking-3xl uppercase leading-none mb-1">
-              Your Best
-            </div>
-            <div className="font-mono text-sm text-sand font-medium truncate">
-              {username}
-            </div>
-          </div>
-          <div className="font-mono text-xl font-bold tabular-nums text-flag shrink-0">
-            {personalBest}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

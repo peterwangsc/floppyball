@@ -103,15 +103,32 @@ export function FloppyBall() {
               showLeaderboard ? "opacity-100" : "opacity-0 pointer-events-none",
             )}
           >
-            <LeaderboardTable username={username} personalBest={personalBest} />
+            <LeaderboardTable />
           </div>
         </div>
 
         {!isPlaying && (
-          <LeaderboardToggle
-            showLeaderboard={showLeaderboard}
-            onToggle={() => setShowLeaderboard((v) => !v)}
-          />
+          <>
+            {showLeaderboard && username && personalBest > 0 && (
+              <div className="mt-2.5 flex items-center justify-center gap-3 select-none">
+                <div className="h-px flex-1 bg-flag/15" />
+                <span className="font-display text-2xs text-flag/50 tracking-3xl uppercase">
+                  Your Best
+                </span>
+                <span className="font-mono text-sm font-bold tabular-nums text-flag/80">
+                  {personalBest}
+                </span>
+                <span className="font-mono text-xs text-sand-light truncate max-w-24">
+                  {username}
+                </span>
+                <div className="h-px flex-1 bg-flag/15" />
+              </div>
+            )}
+            <LeaderboardToggle
+              showLeaderboard={showLeaderboard}
+              onToggle={() => setShowLeaderboard((v) => !v)}
+            />
+          </>
         )}
       </div>
     </div>

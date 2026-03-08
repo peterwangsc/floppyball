@@ -61,19 +61,20 @@ export function StartOverlay({ onStart }: StartOverlayProps) {
           FLOPPY BALL
         </OutlinedText>
 
-        <input
-          value={username}
-          onChange={(e) => { setUsername(e.target.value); setAttempted(false); }}
-          maxLength={18}
-          placeholder="enter username"
-          className={cn(
-            "font-mono animate-fade-in-up mt-35 w-input-max rounded-xl border-2 bg-scorecard/95 px-4 py-3 text-center text-base text-rough outline-none placeholder:text-sand-light focus:ring-2 transition-colors duration-300",
-            attempted
-              ? "border-bogey focus:border-bogey focus:ring-bogey/30 animate-input-nudge"
-              : "border-flag focus:border-turf focus:ring-turf/30",
-          )}
-          style={{ animationDelay: "0.18s" }}
-        />
+        <div className="animate-fade-in-up mt-35 w-input-max" style={{ animationDelay: "0.18s" }}>
+          <input
+            value={username}
+            onChange={(e) => { setUsername(e.target.value); setAttempted(false); }}
+            maxLength={18}
+            placeholder="enter username"
+            className={cn(
+              "font-mono w-full rounded-xl border-2 bg-scorecard/95 px-4 py-3 text-center text-base text-rough outline-none placeholder:text-sand-light focus:ring-2 transition-colors duration-300",
+              attempted
+                ? "border-bogey focus:border-bogey focus:ring-bogey/30 animate-input-nudge"
+                : "border-flag focus:border-turf focus:ring-turf/30",
+            )}
+          />
+        </div>
       </div>
 
       <button

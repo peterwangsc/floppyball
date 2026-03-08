@@ -1,0 +1,15 @@
+export const GAME_WIDTH = 400;
+export const GAME_HEIGHT = 600;
+export const GRAVITY = 0.3;
+export const JUMP_STRENGTH = -5.5;
+export const PIPE_SPEED = 5.5;
+export const PIPE_SPAWN_RATE = 80;
+export const PIPE_GAP = 120;
+export const BACKGROUND_SPEED = 0.4;
+export const MIN_PIPE_HEIGHT = 80;
+export const MIN_FLAG_Y = 80;
+export const PIPE_WIDTH = 80;
+export const ASSET_RENDER_SIZE = 240;
+export const BIRD_RENDER_SIZE = 120;
+export const BG_WIDTH = 1584;
+export const BG_HEIGHT = 672;

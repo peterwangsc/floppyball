@@ -11,10 +11,16 @@ type StartOverlayProps = {
 export function StartOverlay({ onStart }: StartOverlayProps) {
   const [username, setUsername] = useState("");
   const [isExiting, setIsExiting] = useState(false);
+  const [attempted, setAttempted] = useState(false);
 
   const handleStart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isExiting || !username.trim()) return;
+    if (isExiting) return;
+    if (!username.trim()) {
+      setAttempted(false);
+      requestAnimationFrame(() => setAttempted(true));
+      return;
+    }
     setIsExiting(true);
     setTimeout(() => onStart(username), 300);
   };
@@ -57,10 +63,15 @@ export function StartOverlay({ onStart }: StartOverlayProps) {
 
         <input
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => { setUsername(e.target.value); setAttempted(false); }}
           maxLength={18}
           placeholder="enter username"
-          className="font-mono animate-fade-in-up mt-35 w-input-max rounded-xl border-2 border-flag bg-scorecard/95 px-4 py-3 text-center text-base text-rough outline-none placeholder:text-sand-light focus:border-turf focus:ring-2 focus:ring-turf/30 transition-colors"
+          className={cn(
+            "font-mono animate-fade-in-up mt-35 w-input-max rounded-xl border-2 bg-scorecard/95 px-4 py-3 text-center text-base text-rough outline-none placeholder:text-sand-light focus:ring-2 transition-colors duration-300",
+            attempted
+              ? "border-bogey focus:border-bogey focus:ring-bogey/30 animate-input-nudge"
+              : "border-flag focus:border-turf focus:ring-turf/30",
+          )}
           style={{ animationDelay: "0.18s" }}
         />
       </div>
@@ -68,7 +79,6 @@ export function StartOverlay({ onStart }: StartOverlayProps) {
       <button
         className="animate-fade-in-up relative z-10 w-auto rounded-2xl border-3 border-flag bg-linear-to-b from-btn-green to-btn-dark px-8 py-3.5 shadow-btn active:translate-y-1 active:shadow-btn-active-sm transition-transform disabled:cursor-not-allowed disabled:opacity-50"
         style={{ animationDelay: "0.32s" }}
-        disabled={!username.trim()}
         onClick={handleStart}
       >
         <OutlinedText className="font-display whitespace-nowrap text-display-lg tracking-xl text-white">

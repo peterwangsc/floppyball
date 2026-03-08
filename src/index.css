@@ -27,6 +27,7 @@
   --color-gold-score:       #9a6f00;
   --color-gold-tint:        #fffbeb;
   --color-tan:              #c9b99a;
+  --color-bogey:            #c0392b;
 
   /* ── Border radius ─────────────────────────────────────────── */
   --radius-canvas:          1.625rem;   /* 26px */
@@ -119,6 +120,10 @@
   animation: overlay-exit 0.3s ease-in forwards;
 }
 
+@utility animate-input-nudge {
+  animation: input-nudge 0.35s ease-out both;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0)     rotate(-3deg); }
   50%       { transform: translateY(-12px) rotate(3deg);  }
@@ -144,6 +149,15 @@
 @keyframes fade-in-up {
   0%   { transform: translateY(16px); opacity: 0; }
   100% { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes input-nudge {
+  0%   { transform: translateX(0);    }
+  20%  { transform: translateX(-5px); }
+  45%  { transform: translateX(5px);  }
+  65%  { transform: translateX(-3px); }
+  82%  { transform: translateX(3px);  }
+  100% { transform: translateX(0);    }
 }
 
 @keyframes overlay-exit {

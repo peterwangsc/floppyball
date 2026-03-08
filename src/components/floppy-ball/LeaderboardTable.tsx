@@ -1,7 +1,6 @@
 import { memo } from "react";
-import { cn } from "@/utils";
 import { useSupabase } from "@/hooks/useSupabase";
-import { formatDate } from "@/utils";
+import { formatDate, cn } from "@/utils";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
@@ -38,7 +37,12 @@ function LeaderboardTableComponent() {
           </thead>
           <tbody>
             {leaderboards.map((entry, i) => {
-              const rowBg = i === 0 ? "bg-gold-tint" : i % 2 === 0 ? "bg-scorecard" : "bg-scorecard-alt";
+              const rowBg =
+                i === 0
+                  ? "bg-gold-tint"
+                  : i % 2 === 0
+                    ? "bg-scorecard"
+                    : "bg-scorecard-alt";
               const scoreFg = i === 0 ? "text-gold-score" : "text-pine";
               return (
                 <tr
@@ -46,12 +50,21 @@ function LeaderboardTableComponent() {
                   className={cn("border-b border-tan/20 last:border-0", rowBg)}
                 >
                   <td className="font-mono py-3 px-2 text-sm">
-                    {i < 3 ? MEDALS[i] : <span className="text-sand">{i + 1}</span>}
+                    {i < 3 ? (
+                      MEDALS[i]
+                    ) : (
+                      <span className="text-sand">{i + 1}</span>
+                    )}
                   </td>
                   <td className="font-mono py-3 px-2 text-sm text-left font-medium text-rough max-w-25 truncate">
                     {entry.name}
                   </td>
-                  <td className={cn("font-mono py-3 px-2 text-sm font-bold tabular-nums", scoreFg)}>
+                  <td
+                    className={cn(
+                      "font-mono py-3 px-2 text-sm font-bold tabular-nums",
+                      scoreFg,
+                    )}
+                  >
                     {entry.score.toFixed(0)}
                   </td>
                   <td className="font-mono py-3 px-2 text-xs text-sand-light">
@@ -62,7 +75,10 @@ function LeaderboardTableComponent() {
             })}
             {leaderboards.length === 0 && (
               <tr>
-                <td colSpan={4} className="font-mono py-8 px-4 text-sm italic text-center text-sand-light bg-scorecard">
+                <td
+                  colSpan={4}
+                  className="font-mono py-8 px-4 text-sm italic text-center text-sand-light bg-scorecard"
+                >
                   No scores yet — set the record!
                 </td>
               </tr>

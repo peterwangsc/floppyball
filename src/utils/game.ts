@@ -11,7 +11,7 @@ import {
   PIPE_SPAWN_RATE,
   PIPE_SPEED,
   PIPE_WIDTH,
-} from "@/constants";
+} from "@/lib/constants";
 import type { Bird, Pipe } from "./types";
 
 export const createBird = (): Bird => ({
@@ -31,7 +31,10 @@ export const createInitialGameValues = () => ({
   gameOver: false,
 });
 
-export const getDeltaTimeMultiplier = (time: number, lastTime: number | null) => {
+export const getDeltaTimeMultiplier = (
+  time: number,
+  lastTime: number | null,
+) => {
   if (lastTime === null) return 0;
   const dt = time - lastTime;
   const cappedDt = Math.min(dt, 50);
@@ -41,7 +44,9 @@ export const getDeltaTimeMultiplier = (time: number, lastTime: number | null) =>
 export const updateBird = (bird: Bird, deltaTimeMultiplier: number): Bird => ({
   ...bird,
   velocity: bird.velocity + GRAVITY * deltaTimeMultiplier,
-  y: bird.y + (bird.velocity + GRAVITY * deltaTimeMultiplier) * deltaTimeMultiplier,
+  y:
+    bird.y +
+    (bird.velocity + GRAVITY * deltaTimeMultiplier) * deltaTimeMultiplier,
 });
 
 export const updateBackgroundX = (bgX: number, deltaTimeMultiplier: number) => {
@@ -51,7 +56,10 @@ export const updateBackgroundX = (bgX: number, deltaTimeMultiplier: number) => {
 };
 
 export const movePipes = (pipes: Pipe[], deltaTimeMultiplier: number) =>
-  pipes.map((pipe) => ({ ...pipe, x: pipe.x - PIPE_SPEED * deltaTimeMultiplier }));
+  pipes.map((pipe) => ({
+    ...pipe,
+    x: pipe.x - PIPE_SPEED * deltaTimeMultiplier,
+  }));
 
 export const getNextPipeSpawn = (
   pipeSpawnTimer: number,
@@ -66,11 +74,17 @@ export const getNextPipeSpawn = (
 
   const calculatedMinTop = Math.max(MIN_PIPE_HEIGHT, MIN_FLAG_Y - PIPE_GAP);
   const maxPipeHeight = GAME_HEIGHT - PIPE_GAP - MIN_PIPE_HEIGHT;
-  const topHeight = randomValue * (maxPipeHeight - calculatedMinTop) + calculatedMinTop;
+  const topHeight =
+    randomValue * (maxPipeHeight - calculatedMinTop) + calculatedMinTop;
 
   return {
     pipeSpawnTimer: nextTimer - PIPE_SPAWN_RATE,
-    pipe: { x: GAME_WIDTH, topHeight, bottomY: topHeight + PIPE_GAP, passed: false },
+    pipe: {
+      x: GAME_WIDTH,
+      topHeight,
+      bottomY: topHeight + PIPE_GAP,
+      passed: false,
+    },
   };
 };
 

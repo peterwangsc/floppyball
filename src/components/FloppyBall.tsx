@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Game } from "@/Game";
+import { Game } from "@/lib/Game";
 import { useSupabase } from "@/hooks/useSupabase";
 import { AssetPreloads } from "@/components/floppy-ball/AssetPreloads";
 import { GameCanvas } from "@/components/floppy-ball/GameCanvas";
@@ -37,17 +37,24 @@ export function FloppyBall() {
       }),
   );
 
-  const handleJump = useCallback(() => { game.jump(); }, [game]);
-
-  const handleStart = useCallback((username: string) => {
-    game.setUsername(username);
+  const handleJump = useCallback(() => {
     game.jump();
   }, [game]);
+
+  const handleStart = useCallback(
+    (username: string) => {
+      game.setUsername(username);
+      game.jump();
+    },
+    [game],
+  );
 
   useEffect(() => {
     game.render();
     game.mount();
-    return () => { game.destroy(); };
+    return () => {
+      game.destroy();
+    };
   }, [game]);
 
   const isPlaying = gameState === "playing";
@@ -71,19 +78,25 @@ export function FloppyBall() {
         </div>
 
         <div className="relative w-full aspect-2/3 rounded-canvas overflow-hidden shadow-canvas">
-          <div className={cn(
-            "absolute inset-0 transition-opacity duration-300",
-            showLeaderboard ? "opacity-0 pointer-events-none" : "opacity-100",
-          )}>
+          <div
+            className={cn(
+              "absolute inset-0 transition-opacity duration-300",
+              showLeaderboard ? "opacity-0 pointer-events-none" : "opacity-100",
+            )}
+          >
             <GameCanvas canvasRef={canvasRef} onJump={handleJump} />
             {gameState === "start" && <StartOverlay onStart={handleStart} />}
-            {gameState === "gameover" && <GameOverOverlay score={finalScore} onRetry={handleJump} />}
+            {gameState === "gameover" && (
+              <GameOverOverlay score={finalScore} onRetry={handleJump} />
+            )}
           </div>
 
-          <div className={cn(
-            "absolute inset-0 transition-opacity duration-300",
-            showLeaderboard ? "opacity-100" : "opacity-0 pointer-events-none",
-          )}>
+          <div
+            className={cn(
+              "absolute inset-0 transition-opacity duration-300",
+              showLeaderboard ? "opacity-100" : "opacity-0 pointer-events-none",
+            )}
+          >
             <LeaderboardTable />
           </div>
         </div>

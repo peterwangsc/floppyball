@@ -4,7 +4,7 @@ import {
   fetchLeaderboardEntries,
   insertLeaderboardEntry,
   supabase,
-} from "@/supabase";
+} from "@/lib/supabase";
 import { SupabaseContext } from "./supabaseContext";
 
 const LEADERBOARD_LIMIT = 10;

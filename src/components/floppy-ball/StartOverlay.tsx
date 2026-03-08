@@ -32,14 +32,19 @@ export function StartOverlay({ onStart }: StartOverlayProps) {
         aria-hidden="true"
         className="absolute inset-0 size-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
       <div className="relative z-10 flex min-h-75 w-full flex-col items-center justify-center">
         <div
           className="pointer-events-none absolute animate-float drop-shadow-ball"
           style={{ top: "70px", left: "calc(50% - 60px)", width: "120px" }}
         >
-          <img src={birdImageSrc} alt="" aria-hidden="true" className="w-full object-contain" />
+          <img
+            src={birdImageSrc}
+            alt=""
+            aria-hidden="true"
+            className="w-full object-contain"
+          />
         </div>
 
         <OutlinedText

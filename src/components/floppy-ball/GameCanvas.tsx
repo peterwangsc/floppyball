@@ -1,5 +1,5 @@
 import { memo, type RefObject } from "react";
-import { GAME_WIDTH, GAME_HEIGHT } from "@/constants";
+import { GAME_WIDTH, GAME_HEIGHT } from "@/lib/constants";
 
 type GameCanvasProps = {
   canvasRef: RefObject<HTMLCanvasElement | null>;

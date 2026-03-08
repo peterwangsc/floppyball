@@ -24,7 +24,7 @@ import {
   updateBird,
   updatePassedPipes,
   movePipes,
-} from "./utils/index";
+} from "../utils/index";
 
 type GameImageRefs = {
   bgImgRef: RefObject<HTMLImageElement | null>;
@@ -49,7 +49,10 @@ export class Game {
   private birdImgRef: RefObject<HTMLImageElement | null>;
   private pipeTopImgRef: RefObject<HTMLImageElement | null>;
   private pipeBottomImgRef: RefObject<HTMLImageElement | null>;
-  private submitScore?: (name: string, score: number) => Promise<boolean> | void;
+  private submitScore?: (
+    name: string,
+    score: number,
+  ) => Promise<boolean> | void;
   private onGameStateChange?: (gameState: GameState, score?: number) => void;
   private requestId: number | null = null;
   private isMounted = false;

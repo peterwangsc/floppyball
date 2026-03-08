@@ -34,7 +34,7 @@ type GameImageRefs = {
 };
 
 type GameCallbacks = {
-  submitScore?: (name: string, score: number) => Promise<boolean> | void;
+  submitScore?: (name: string | undefined, score: number) => Promise<boolean> | void;
   onGameStateChange?: (gameState: GameState, score?: number) => void;
 };
 
@@ -50,7 +50,7 @@ export class Game {
   private pipeTopImgRef: RefObject<HTMLImageElement | null>;
   private pipeBottomImgRef: RefObject<HTMLImageElement | null>;
   private submitScore?: (
-    name: string,
+    name: string | undefined,
     score: number,
   ) => Promise<boolean> | void;
   private onGameStateChange?: (gameState: GameState, score?: number) => void;
@@ -58,7 +58,7 @@ export class Game {
   private isMounted = false;
   private gameState: GameState = "start";
   private gameEndedAt: number | null = null;
-  private username = "";
+  private username: string | undefined;
   private score = 0;
   private bird = createInitialGameValues().bird;
   private pipes: Pipe[] = createInitialGameValues().pipes;
@@ -85,7 +85,7 @@ export class Game {
     this.onGameStateChange = onGameStateChange;
   }
 
-  public setUsername = (username: string) => {
+  public setUsername = (username?: string) => {
     if (this.username === username) {
       return;
     }
@@ -94,10 +94,6 @@ export class Game {
   };
 
   public start() {
-    if (!this.username.trim()) {
-      return;
-    }
-
     this.resetGameValues();
     this.gameState = "playing";
     this.score = 0;

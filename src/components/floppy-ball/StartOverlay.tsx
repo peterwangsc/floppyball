@@ -5,24 +5,18 @@ import splashImageSrc from "@/assets/golf_background.png";
 import birdImageSrc from "@/assets/floppy_ball.png";
 
 type StartOverlayProps = {
-  onStart: (username: string) => void;
+  onStart: (username?: string) => void;
 };
 
 export function StartOverlay({ onStart }: StartOverlayProps) {
   const [username, setUsername] = useState("");
   const [isExiting, setIsExiting] = useState(false);
-  const [attempted, setAttempted] = useState(false);
 
   const handleStart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isExiting) return;
-    if (!username.trim()) {
-      setAttempted(false);
-      requestAnimationFrame(() => setAttempted(true));
-      return;
-    }
     setIsExiting(true);
-    setTimeout(() => onStart(username), 300);
+    setTimeout(() => onStart(username.trim() || undefined), 300);
   };
 
   return (
@@ -61,18 +55,18 @@ export function StartOverlay({ onStart }: StartOverlayProps) {
           FLOPPY BALL
         </OutlinedText>
 
-        <div className="animate-fade-in-up mt-35 w-input-max" style={{ animationDelay: "0.18s" }}>
+        <div
+          className="animate-fade-in-up mt-35 w-input-max"
+          style={{ animationDelay: "0.18s" }}
+        >
           <input
             value={username}
-            onChange={(e) => { setUsername(e.target.value); setAttempted(false); }}
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
             maxLength={18}
-            placeholder="enter username"
-            className={cn(
-              "font-mono w-full rounded-xl border-2 bg-scorecard/95 px-4 py-3 text-center text-base text-rough outline-none placeholder:text-sand-light focus:ring-2 transition-colors duration-300",
-              attempted
-                ? "border-bogey focus:border-bogey focus:ring-bogey/30 animate-input-nudge"
-                : "border-flag focus:border-turf focus:ring-turf/30",
-            )}
+            placeholder="name (optional)"
+            className="font-mono w-full rounded-xl border-2 border-flag bg-scorecard/95 px-4 py-3 text-center text-base text-rough outline-none placeholder:text-sand-light focus:border-turf focus:ring-2 focus:ring-turf/30 transition-colors duration-300"
           />
         </div>
       </div>

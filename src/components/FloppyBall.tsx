@@ -11,6 +11,8 @@ import { PersonalBest } from "@/components/floppy-ball/PersonalBest";
 import { cn } from "@/utils";
 import type { GameState } from "@/utils";
 
+const ANONYMOUS_PERSONAL_BEST_KEY = "floppyball:anonymousPersonalBest";
+
 export function FloppyBall() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bgImgRef = useRef<HTMLImageElement>(null);
@@ -20,9 +22,31 @@ export function FloppyBall() {
   const [gameState, setGameState] = useState<GameState>("start");
   const [finalScore, setFinalScore] = useState(0);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [username, setUsername] = useState("");
+  const [, setUsername] = useState<string | undefined>();
   const [personalBest, setPersonalBest] = useState(0);
+  const usernameRef = useRef<string | undefined>(undefined);
   const { fetchPersonalBest, submitScore } = useSupabase();
+  const handleScoreSubmit = useCallback(
+    async (name: string | undefined, score: number) => {
+      if (!name) {
+        const storedBest = Number(
+          window.sessionStorage.getItem(ANONYMOUS_PERSONAL_BEST_KEY) ?? "0",
+        );
+        const nextBest = Math.max(
+          Number.isFinite(storedBest) ? storedBest : 0,
+          score,
+        );
+        window.sessionStorage.setItem(
+          ANONYMOUS_PERSONAL_BEST_KEY,
+          nextBest.toString(),
+        );
+        return true;
+      }
+
+      return submitScore(name, score);
+    },
+    [submitScore],
+  );
   const [game] = useState(
     () =>
       new Game({
@@ -31,7 +55,7 @@ export function FloppyBall() {
         birdImgRef,
         pipeTopImgRef,
         pipeBottomImgRef,
-        submitScore,
+        submitScore: handleScoreSubmit,
         onGameStateChange: (nextGameState, score) => {
           setGameState(nextGameState);
           if (nextGameState === "playing") setShowLeaderboard(false);
@@ -48,14 +72,25 @@ export function FloppyBall() {
   }, [game]);
 
   const handleStart = useCallback(
-    (name: string) => {
-      const trimmedName = name.trim();
-      game.setUsername(trimmedName);
-      setUsername(trimmedName);
+    (name?: string) => {
+      const trimmedName = name?.trim();
+      const nextUsername = trimmedName || undefined;
+      usernameRef.current = nextUsername;
+      game.setUsername(nextUsername);
+      setUsername(nextUsername);
       setPersonalBest(0);
-      void fetchPersonalBest(trimmedName).then((bestScore) => {
-        setPersonalBest(bestScore);
-      });
+      if (!nextUsername) {
+        const storedBest = Number(
+          window.sessionStorage.getItem(ANONYMOUS_PERSONAL_BEST_KEY) ?? "0",
+        );
+        setPersonalBest(Number.isFinite(storedBest) ? storedBest : 0);
+      } else {
+        void fetchPersonalBest(nextUsername).then((bestScore) => {
+          if (usernameRef.current === nextUsername) {
+            setPersonalBest(bestScore);
+          }
+        });
+      }
       game.jump();
     },
     [fetchPersonalBest, game],
@@ -112,7 +147,7 @@ export function FloppyBall() {
             <LeaderboardTable />
           </div>
         </div>
-        <PersonalBest username={username} personalBest={personalBest} />
+        <PersonalBest personalBest={personalBest} />
         {!isPlaying && (
           <LeaderboardToggle
             showLeaderboard={showLeaderboard}

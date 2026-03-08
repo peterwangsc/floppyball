@@ -5,7 +5,9 @@ import { AssetPreloads } from "@/components/floppy-ball/AssetPreloads";
 import { GameCanvas } from "@/components/floppy-ball/GameCanvas";
 import { GameOverOverlay } from "@/components/floppy-ball/GameOverOverlay";
 import { LeaderboardTable } from "@/components/floppy-ball/LeaderboardTable";
+import { LeaderboardToggle } from "@/components/floppy-ball/LeaderboardToggle";
 import { StartOverlay } from "@/components/floppy-ball/StartOverlay";
+import { cn } from "@/utils";
 import type { GameState } from "@/utils";
 
 export function FloppyBall() {
@@ -16,6 +18,7 @@ export function FloppyBall() {
   const pipeBottomImgRef = useRef<HTMLImageElement>(null);
   const [gameState, setGameState] = useState<GameState>("start");
   const [finalScore, setFinalScore] = useState(0);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const { submitScore } = useSupabase();
   const [game] = useState(
     () =>
@@ -28,36 +31,29 @@ export function FloppyBall() {
         submitScore,
         onGameStateChange: (nextGameState, score) => {
           setGameState(nextGameState);
-          if (typeof score === "number") {
-            setFinalScore(score);
-          }
+          if (nextGameState === "playing") setShowLeaderboard(false);
+          if (typeof score === "number") setFinalScore(score);
         },
       }),
   );
 
-  const handleJump = useCallback(() => {
+  const handleJump = useCallback(() => { game.jump(); }, [game]);
+
+  const handleStart = useCallback((username: string) => {
+    game.setUsername(username);
     game.jump();
   }, [game]);
-
-  const handleStart = useCallback(
-    (username: string) => {
-      game.setUsername(username);
-      game.jump();
-    },
-    [game],
-  );
 
   useEffect(() => {
     game.render();
     game.mount();
-
-    return () => {
-      game.destroy();
-    };
+    return () => { game.destroy(); };
   }, [game]);
 
+  const isPlaying = gameState === "playing";
+
   return (
-    <div className="mx-auto w-full max-w-[400px] px-2.5 pt-5 pb-10 sm:px-4 sm:pt-8">
+    <div className="mx-auto w-full max-w-100 px-3 pt-4 pb-12">
       <AssetPreloads
         bgImgRef={bgImgRef}
         birdImgRef={birdImgRef}
@@ -65,18 +61,39 @@ export function FloppyBall() {
         pipeBottomImgRef={pipeBottomImgRef}
       />
 
-      <div className="mx-auto w-full max-w-[400px]">
-        <div className="relative aspect-2/3 w-full max-w-[400px]">
-          <GameCanvas canvasRef={canvasRef} onJump={handleJump} />
-
-          {gameState === "start" && <StartOverlay onStart={handleStart} />}
-
-          {gameState === "gameover" && (
-            <GameOverOverlay score={finalScore} onRetry={handleJump} />
-          )}
+      <div className="mx-auto w-full max-w-100">
+        <div className="mb-2.5 flex items-center justify-center gap-3 select-none">
+          <div className="h-px flex-1 bg-flag/30" />
+          <span className="font-display text-flag text-xs tracking-4xl uppercase">
+            ⛳ Floppy Ball ⛳
+          </span>
+          <div className="h-px flex-1 bg-flag/30" />
         </div>
 
-        <LeaderboardTable />
+        <div className="relative w-full aspect-2/3 rounded-canvas overflow-hidden shadow-canvas">
+          <div className={cn(
+            "absolute inset-0 transition-opacity duration-300",
+            showLeaderboard ? "opacity-0 pointer-events-none" : "opacity-100",
+          )}>
+            <GameCanvas canvasRef={canvasRef} onJump={handleJump} />
+            {gameState === "start" && <StartOverlay onStart={handleStart} />}
+            {gameState === "gameover" && <GameOverOverlay score={finalScore} onRetry={handleJump} />}
+          </div>
+
+          <div className={cn(
+            "absolute inset-0 transition-opacity duration-300",
+            showLeaderboard ? "opacity-100" : "opacity-0 pointer-events-none",
+          )}>
+            <LeaderboardTable />
+          </div>
+        </div>
+
+        {!isPlaying && (
+          <LeaderboardToggle
+            showLeaderboard={showLeaderboard}
+            onToggle={() => setShowLeaderboard((v) => !v)}
+          />
+        )}
       </div>
     </div>
   );

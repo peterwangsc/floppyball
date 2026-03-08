@@ -1,8 +1,157 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Trebuchet MS", "Segoe UI", sans-serif;
+  /* ── Fonts ─────────────────────────────────────────────────── */
+  --font-display: "Alfa Slab One", serif;
+  --font-mono:    "DM Mono", "Courier New", monospace;
+  --font-sans:    "DM Mono", "Courier New", monospace;
+
+  /* ── Colors ────────────────────────────────────────────────── */
+  --color-fairway:          #051209;
+  --color-rough:            #0d2818;
+  --color-turf:             #1a6b36;
+  --color-flag:             #d4a017;
+  --color-scorecard:        #f5edd8;
+  --color-scorecard-alt:    #ede4cc;
+
+  --color-pine:             #1a4a2c;
+  --color-pine-dark:        #133b22;
+  --color-pine-mid:         #1e5230;
+
+  --color-btn-green:        #2fa54d;
+  --color-btn-dark:         #1a6f33;
+  --color-btn-shadow:       #0d3d1e;
+
+  --color-sand:             #6b5a3e;
+  --color-sand-light:       #8b7355;
+  --color-gold-score:       #9a6f00;
+  --color-gold-tint:        #fffbeb;
+  --color-tan:              #c9b99a;
+
+  /* ── Border radius ─────────────────────────────────────────── */
+  --radius-canvas:          1.625rem;   /* 26px */
+  --radius-overlay:         1.5rem;     /* 24px */
+
+  /* ── Shadows ───────────────────────────────────────────────── */
+  --shadow-canvas: 0 0 0 2px rgba(212,160,23,0.25), 0 0 40px rgba(26,107,54,0.35), 0 16px 48px rgba(0,0,0,0.5);
+  --shadow-card:   0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,160,23,0.1);
+  --shadow-btn:         0 4px 0 var(--color-btn-shadow), 0 6px 20px rgba(0,0,0,0.4);
+  --shadow-btn-active:  0 2px 0 var(--color-btn-shadow);
+  --shadow-btn-active-sm: 0 2px 0 var(--color-btn-shadow), 0 3px 10px rgba(0,0,0,0.3);
+
+  /* ── Drop shadows ──────────────────────────────────────────── */
+  --drop-shadow-ball: 0 4px 12px rgba(0,0,0,0.5);
+
+  /* ── Letter spacing ────────────────────────────────────────── */
+  --tracking-xl:   0.15em;
+  --tracking-2xl:  0.2em;
+  --tracking-3xl:  0.3em;
+  --tracking-4xl:  0.35em;
+
+  /* ── Font sizes ────────────────────────────────────────────── */
+  --text-2xs:          0.625rem;   /* 10px */
+  --text-eyebrow:      0.6875rem;  /* 11px */
+  --text-display-md:   1.6rem;
+  --text-display-lg:   2rem;
 }
+
+/* ── One-off CSS patterns ───────────────────────────────────── */
+
+@utility border-3 {
+  border-width: 3px;
+}
+
+@utility backdrop-blur-px {
+  backdrop-filter: blur(1px);
+}
+
+@utility w-9\/10 {
+  width: 90%;
+}
+
+@utility w-input-max {
+  width: min(280px, 80%);
+}
+
+@utility bg-leaderboard-header {
+  background: linear-gradient(180deg, var(--color-pine) 0%, var(--color-pine-dark) 100%);
+}
+
+@utility text-outlined {
+  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+
+@utility text-score-fluid {
+  font-size: clamp(3.5rem, 18vw, 5rem);
+}
+
+@utility canvas-image-rendering {
+  image-rendering: pixelated;
+}
+
+@utility no-touch-callout {
+  -webkit-touch-callout: none;
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+
+@utility animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@utility animate-score-pop {
+  animation: score-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@utility animate-card-drop {
+  animation: card-drop 0.45s cubic-bezier(0.22, 1.4, 0.64, 1) both;
+}
+
+@utility animate-card-exit {
+  animation: card-exit 0.22s ease-in forwards;
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+@utility animate-overlay-exit {
+  animation: overlay-exit 0.3s ease-in forwards;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0)     rotate(-3deg); }
+  50%       { transform: translateY(-12px) rotate(3deg);  }
+}
+
+@keyframes score-pop {
+  0%   { transform: scale(0.5);  opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+@keyframes card-drop {
+  0%   { transform: translateY(-56px) scale(0.9);  opacity: 0; }
+  65%  { transform: translateY(5px)   scale(1.01); opacity: 1; }
+  100% { transform: translateY(0)     scale(1);    opacity: 1; }
+}
+
+@keyframes card-exit {
+  0%   { transform: translateY(0)     scale(1);   opacity: 1; }
+  100% { transform: translateY(-48px) scale(0.9); opacity: 0; }
+}
+
+@keyframes fade-in-up {
+  0%   { transform: translateY(16px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes overlay-exit {
+  0%   { transform: scale(1);    opacity: 1; }
+  100% { transform: scale(1.06); opacity: 0; }
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
 
 @layer base {
   * {
@@ -13,21 +162,22 @@
   body,
   #root {
     min-width: 320px;
-    min-height: 100%;
+    height: 100%;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    color: #18361d;
+    color: var(--color-scorecard);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
     font-synthesis: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background:
-      radial-gradient(circle at top, rgba(255, 244, 206, 0.9), transparent 42%),
-      linear-gradient(180deg, #eefae8 0%, #dbf0d9 48%, #f6eddc 100%);
+      radial-gradient(ellipse 140% 50% at 50% 0%, var(--color-pine) 0%, transparent 65%),
+      linear-gradient(180deg, var(--color-rough) 0%, var(--color-fairway) 100%);
+    background-attachment: fixed;
   }
 
   button,

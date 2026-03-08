@@ -13,3 +13,4 @@ export const ASSET_RENDER_SIZE = 240;
 export const BIRD_RENDER_SIZE = 120;
 export const BG_WIDTH = 1584;
 export const BG_HEIGHT = 672;
+export const RESTART_COOLDOWN_MS = 1500;

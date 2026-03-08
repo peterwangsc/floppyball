@@ -9,7 +9,7 @@ type GameCanvasProps = {
 function GameCanvasComponent({ canvasRef, onJump }: GameCanvasProps) {
   return (
     <div
-      className="absolute inset-0 z-10 overflow-hidden rounded-[24px] touch-none select-none"
+      className="absolute inset-0 z-10 overflow-hidden rounded-overlay touch-none select-none"
       onPointerDown={onJump}
       onContextMenu={(e) => e.preventDefault()}
     >
@@ -17,7 +17,7 @@ function GameCanvasComponent({ canvasRef, onJump }: GameCanvasProps) {
         ref={canvasRef}
         width={GAME_WIDTH}
         height={GAME_HEIGHT}
-        className="block size-full cursor-pointer touch-none select-none [image-rendering:pixelated] [-webkit-touch-callout:none] [-webkit-user-select:none]"
+        className="block size-full cursor-pointer touch-none select-none canvas-image-rendering no-touch-callout"
       />
     </div>
   );

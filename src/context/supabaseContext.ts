@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { LeaderboardEntry } from "@/components/floppy-ball/types";
+import type { LeaderboardEntry } from "@/utils";
 
 export type SupabaseContextValue = {
   isConfigured: boolean;

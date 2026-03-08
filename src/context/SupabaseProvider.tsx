@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import type { LeaderboardEntry } from "@/components/floppy-ball/types";
+import type { LeaderboardEntry } from "@/utils";
 import {
   fetchLeaderboardEntries,
   insertLeaderboardEntry,

@@ -5,6 +5,7 @@ import {
   GAME_HEIGHT,
   GAME_WIDTH,
   JUMP_STRENGTH,
+  RESTART_COOLDOWN_MS,
 } from "./constants";
 import {
   createInitialGameValues,
@@ -23,7 +24,7 @@ import {
   updateBird,
   updatePassedPipes,
   movePipes,
-} from "./utils";
+} from "./utils/index";
 
 type GameImageRefs = {
   bgImgRef: RefObject<HTMLImageElement | null>;
@@ -53,6 +54,7 @@ export class Game {
   private requestId: number | null = null;
   private isMounted = false;
   private gameState: GameState = "start";
+  private gameEndedAt: number | null = null;
   private username = "";
   private score = 0;
   private bird = createInitialGameValues().bird;
@@ -102,6 +104,13 @@ export class Game {
   public jump() {
     if (this.gameState === "playing") {
       this.bird.velocity = JUMP_STRENGTH;
+      return;
+    }
+
+    if (
+      this.gameEndedAt !== null &&
+      Date.now() - this.gameEndedAt < RESTART_COOLDOWN_MS
+    ) {
       return;
     }
 
@@ -232,6 +241,7 @@ export class Game {
 
     this.gameOver = true;
     this.gameState = "gameover";
+    this.gameEndedAt = Date.now();
     this.onGameStateChange?.(this.gameState, this.score);
     if (this.score > 0) {
       void this.submitScore?.(this.username, this.score);

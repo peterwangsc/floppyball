@@ -43,6 +43,32 @@ export const fetchLeaderboardEntries = async (limit: number) => {
   return mapRows(data as FloppyBallScoreRow[])
 }
 
+export const fetchPersonalBest = async (name: string) => {
+  if (!supabase) {
+    return 0
+  }
+
+  const trimmedName = name.trim()
+  if (!trimmedName) {
+    return 0
+  }
+
+  const { data, error } = await supabase
+    .from('floppyball_scores')
+    .select('score')
+    .ilike('player_name', trimmedName)
+    .order('score', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error || !data) {
+    return 0
+  }
+
+  const score = Number(data.score)
+  return Number.isFinite(score) ? score : 0
+}
+
 export const insertLeaderboardEntry = async (name: string, score: number) => {
   if (!supabase) {
     return false

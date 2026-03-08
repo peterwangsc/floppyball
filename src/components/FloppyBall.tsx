@@ -7,6 +7,7 @@ import { GameOverOverlay } from "@/components/floppy-ball/GameOverOverlay";
 import { LeaderboardTable } from "@/components/floppy-ball/LeaderboardTable";
 import { LeaderboardToggle } from "@/components/floppy-ball/LeaderboardToggle";
 import { StartOverlay } from "@/components/floppy-ball/StartOverlay";
+import { PersonalBest } from "@/components/floppy-ball/PersonalBest";
 import { cn } from "@/utils";
 import type { GameState } from "@/utils";
 
@@ -21,7 +22,7 @@ export function FloppyBall() {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [username, setUsername] = useState("");
   const [personalBest, setPersonalBest] = useState(0);
-  const { submitScore } = useSupabase();
+  const { fetchPersonalBest, submitScore } = useSupabase();
   const [game] = useState(
     () =>
       new Game({
@@ -48,11 +49,16 @@ export function FloppyBall() {
 
   const handleStart = useCallback(
     (name: string) => {
-      game.setUsername(name);
-      setUsername(name);
+      const trimmedName = name.trim();
+      game.setUsername(trimmedName);
+      setUsername(trimmedName);
+      setPersonalBest(0);
+      void fetchPersonalBest(trimmedName).then((bestScore) => {
+        setPersonalBest(bestScore);
+      });
       game.jump();
     },
-    [game],
+    [fetchPersonalBest, game],
   );
 
   useEffect(() => {
@@ -106,29 +112,12 @@ export function FloppyBall() {
             <LeaderboardTable />
           </div>
         </div>
-
+        <PersonalBest username={username} personalBest={personalBest} />
         {!isPlaying && (
-          <>
-            {showLeaderboard && username && personalBest > 0 && (
-              <div className="mt-2.5 flex items-center justify-center gap-3 select-none">
-                <div className="h-px flex-1 bg-flag/15" />
-                <span className="font-display text-2xs text-flag/50 tracking-3xl uppercase">
-                  Your Best
-                </span>
-                <span className="font-mono text-sm font-bold tabular-nums text-flag/80">
-                  {personalBest}
-                </span>
-                <span className="font-mono text-xs text-sand-light truncate max-w-24">
-                  {username}
-                </span>
-                <div className="h-px flex-1 bg-flag/15" />
-              </div>
-            )}
-            <LeaderboardToggle
-              showLeaderboard={showLeaderboard}
-              onToggle={() => setShowLeaderboard((v) => !v)}
-            />
-          </>
+          <LeaderboardToggle
+            showLeaderboard={showLeaderboard}
+            onToggle={() => setShowLeaderboard((v) => !v)}
+          />
         )}
       </div>
     </div>

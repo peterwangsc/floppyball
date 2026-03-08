@@ -6,6 +6,7 @@ export type SupabaseContextValue = {
   isLoading: boolean;
   leaderboards: LeaderboardEntry[];
   refreshLeaderboard: () => Promise<void>;
+  fetchPersonalBest: (name: string) => Promise<number>;
   submitScore: (name: string, score: number) => Promise<boolean>;
 };
 

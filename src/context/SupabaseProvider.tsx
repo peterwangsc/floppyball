@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import type { LeaderboardEntry } from "@/utils";
 import {
+  fetchPersonalBest,
   fetchLeaderboardEntries,
   insertLeaderboardEntry,
   supabase,
@@ -92,6 +93,7 @@ export function SupabaseProvider({ children }: { children: ReactNode }) {
         isLoading,
         leaderboards,
         refreshLeaderboard,
+        fetchPersonalBest,
         submitScore,
       }}
     >

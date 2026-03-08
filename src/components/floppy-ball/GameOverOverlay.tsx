@@ -54,22 +54,23 @@ export function GameOverOverlay({ score, onRetry }: GameOverOverlayProps) {
           </div>
 
           <span
-            className="font-mono animate-fade-in-up text-flag/50 text-2xs tracking-3xl uppercase mt-1 mb-8"
+            className="font-mono animate-fade-in-up text-flag/50 text-2xs tracking-3xl uppercase mt-1 mb-6"
             style={{ animationDelay: "0.45s" }}
           >
             score
           </span>
 
-          {retryReady && (
-            <button
-              className="animate-fade-in-up cursor-pointer rounded-xl border-3 border-flag bg-linear-to-b from-btn-green to-btn-dark px-10 py-3 shadow-btn active:translate-y-1 active:shadow-btn-active transition-transform"
-              onClick={handleRetry}
-            >
-              <span className="font-display text-outlined whitespace-nowrap text-display-md tracking-xl text-white">
-                RETRY
-              </span>
-            </button>
-          )}
+          <button
+            className={cn(
+              "cursor-pointer rounded-xl border-3 border-flag bg-linear-to-b from-btn-green to-btn-dark px-10 py-3 shadow-btn active:translate-y-1 active:shadow-btn-active transition-[transform,opacity] duration-300",
+              retryReady ? "opacity-100 animate-fade-in-up" : "opacity-0 pointer-events-none",
+            )}
+            onClick={handleRetry}
+          >
+            <span className="font-display text-outlined whitespace-nowrap text-display-md tracking-xl text-white">
+              RETRY
+            </span>
+          </button>
         </div>
       </div>
     </div>
